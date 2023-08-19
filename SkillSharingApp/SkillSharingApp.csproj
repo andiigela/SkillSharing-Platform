@@ -8,6 +8,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\**" />
+    <Content Remove="Migrations\**" />
+    <EmbeddedResource Remove="Migrations\**" />
+    <None Remove="Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Workshops\Attendances.cshtml" />
+    <None Include="Views\Workshops\Create.cshtml" />
+    <None Include="Views\Workshops\Edit.cshtml" />
+    <None Include="Views\Workshops\Index.cshtml" />
+    <None Include="Views\Workshops\WorkshopNotFound.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.20" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.14" />
@@ -25,10 +40,6 @@
   <ItemGroup>
     <ProjectReference Include="..\SkillSharingApp_BAL\SkillSharingApp_BAL.csproj" />
     <ProjectReference Include="..\SkillSharingApp_DAL\SkillSharingApp_DAL.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>
