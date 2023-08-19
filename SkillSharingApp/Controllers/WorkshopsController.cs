@@ -126,7 +126,16 @@ namespace SkillSharingApp.Controllers
             return View(usersAttendances);
         }
         [Authorize]
-        
+        [HttpGet]
+        public IActionResult RemoveAttendance(int workshopId, string userId)
+        {
+            _serviceAttendances.DeleteAttendance(workshopId, userId);
+            return RedirectToAction("Attendances", new { workshopId = workshopId });
+        }
+        public IActionResult WorkshopNotFound()
+        {
+            return View();
+        }
 
     }
 }
