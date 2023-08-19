@@ -97,6 +97,36 @@ namespace SkillSharingApp.Controllers
             if (workshop.Availability < DateTime.Now) workshop.isVisible = 0;
             return View(workshop);
         }
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> EditWorkshop(Workshop workshop)
+        {
+            if (workshop == null) return NotFound("Workshop does not exist");
+            if (workshop.Availability < DateTime.Now) workshop.isVisible = 0;
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null) return NotFound("User not exists");
+            var applicationUser = _serviceApplicationUser.getApplicationUserById(currentUser.Id);
+            workshop.CreateApplicationUserDto_DALId = applicationUser.Id;
+            workshop.CreateApplicationUserDto_DAL = applicationUser;
+            _serviceWorkshop.UpdateWorkShop(workshop);
+            return RedirectToAction("Index");
+        }
+        public IActionResult DeleteImage(int workshopId, string imageId)
+        {
+            _serviceWorkshop.DeleteWorkshopImage(workshopId, imageId);
+            return RedirectToAction("Edit", new { id = workshopId });
+        }
+        [Authorize]
+        [HttpGet]
+        public IActionResult Attendances(int workshopId)
+        {
+            var usersAttendances = _serviceAttendances.GetUsersOfWorkshops(workshopId);
+            if (usersAttendances == null) return NotFound("There is no Users that Attended your Workshop");
+            return View(usersAttendances);
+        }
+        [Authorize]
+        
 
     }
 }
