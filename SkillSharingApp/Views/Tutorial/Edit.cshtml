@@ -1,0 +1,49 @@
+@using SkillSharingApp_BAL.DTOs
+@model TutorialDto
+
+@{
+    ViewData["Title"] = "Edit Tutorial";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<h2>Edit Tutorial</h2>
+
+@using (Html.BeginForm())
+{
+    <div>
+        <label>Title:</label>
+        @Html.TextBoxFor(m => m.Title)
+        @Html.ValidationMessageFor(m => m.Title)
+    </div>
+    <div>
+        <label>Duration:</label>
+        @Html.TextBoxFor(m => m.Duration)
+        @Html.ValidationMessageFor(m => m.Duration)
+    </div>
+    <div>
+        <label>Instructions:</label>
+        @Html.TextBoxFor(m => m.Instructions)
+        @Html.ValidationMessageFor(m => m.Instructions)
+    </div>
+
+    <div>
+        <label>Video URL:</label>
+        @Html.TextBoxFor(m => m.VideoUrl)
+        @Html.ValidationMessageFor(m => m.VideoUrl)
+    </div>
+
+    <div>
+        <label>Image URL:</label>
+        @Html.TextBoxFor(m => m.ImageUrl)
+        @Html.ValidationMessageFor(m => m.ImageUrl)
+    </div>
+    <div>
+        <label>Description:</label> <br>
+        @Html.TextAreaFor(m => m.Description, new { rows = 4, cols = 50 })
+        @Html.ValidationMessageFor(m => m.Description)
+    </div>
+
+    @Html.HiddenFor(m => m.Comments)
+
+    <input type="submit" value="Save" />
+    <a class="btn btn-secondary" href="@Url.Action("Index", "Tutorial")">Cancel</a>
+}

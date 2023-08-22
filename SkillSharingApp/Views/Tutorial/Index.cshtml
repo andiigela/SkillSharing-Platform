@@ -1,0 +1,109 @@
+@using Microsoft.AspNetCore.Identity;
+@using SkillSharingApp.Models;
+@using SkillSharingApp_BAL.DTOs
+@model IEnumerable<TutorialDto>
+
+@{
+    ViewData["Title"] = "Tutorials";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+@{
+    bool isAuthenticated = User.Identity.IsAuthenticated;
+}
+
+<h1>Tutorials</h1>
+
+
+@inject UserManager<ApplicationUser> UserManager
+
+@if (isAuthenticated)
+{
+    <a class="btn btn-primary" href="@Url.Action("Create", "Tutorial")">Create New</a>
+    <button type="button" class="btn btn-secondary" onclick="showMyTutorials('@User.Identity.Name')">My Tutorials</button>
+    <button type="button" class="btn btn-secondary" onclick="showAllTutorials()">All Tutorials</button>
+    <div class="table-responsive" style="margin-bottom: 350px">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Duration</th>
+                    <th>Instructions</th>
+                    <th>Video URL</th>
+                    <th>Image URL</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var tutorial in Model)
+                {
+                    <tr class="tutorial-row @((User.Identity.IsAuthenticated && tutorial.UserId == UserManager.FindByNameAsync(User.Identity.Name)?.Result.Id) ? "my-tutorial" : "other-tutorial")">
+                        <td>@tutorial.Title</td>
+                        <td>@(tutorial.Description.Length > 30 ? tutorial.Description.Substring(0, 30) + "..." : tutorial.Description)</td>
+                        <td>@tutorial.Duration</td>
+                        <td>@(tutorial.Instructions.Length > 30 ? tutorial.Instructions.Substring(0, 30) + "..." : tutorial.Instructions)</td>
+                        <td>@(tutorial.VideoUrl.Length > 30 ? tutorial.VideoUrl.Substring(0, 30) + "..." : tutorial.VideoUrl)</td>
+                        <td>@(tutorial.ImageUrl.Length > 30 ? tutorial.ImageUrl.Substring(0, 30) + "..." : tutorial.ImageUrl)</td>
+                        <td>
+                            <a class="btn btn-primary" href="@Url.Action("Details", "Tutorial", new { id = tutorial.Id })">Watch Tutorial</a>
+                        </td>
+                        @if (User.Identity.IsAuthenticated && tutorial.UserId == UserManager.FindByNameAsync(User.Identity.Name)?.Result.Id)
+                        {
+                            <td>
+                                <a class="btn btn-primary" href="@Url.Action("Edit", "Tutorial", new { id = tutorial.Id })">Edit</a>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_@tutorial.Id">Delete</button>
+                            </td>
+                        }
+                    </tr>
+
+                    <div class="modal fade" id="confirmDeleteModal_@tutorial.Id" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to delete this tutorial?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                    <form action="@Url.Action("Delete", "Tutorial", new { id = tutorial.Id })" method="post">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-danger">Yes</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<script>
+    function showMyTutorials(userId) {
+        const tutorialRows = document.querySelectorAll('.tutorial-row');
+        tutorialRows.forEach(row => {
+            if (row.classList.contains('my-tutorial')) {
+                row.style.display = 'table-row';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    function showAllTutorials() {
+        const tutorialRows = document.querySelectorAll('.tutorial-row');
+        tutorialRows.forEach(row => {
+            row.style.display = 'table-row';
+        });
+    }
+</script>

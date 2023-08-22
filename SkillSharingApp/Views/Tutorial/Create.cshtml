@@ -1,0 +1,38 @@
+﻿@using SkillSharingApp_BAL.DTOs
+@model TutorialDto
+
+@{
+    ViewData["Title"] = "Create Tutorial";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h2>Create Tutorial</h2>
+
+<form asp-controller="Tutorial" asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="Title">Title</label>
+        <input type="text" class="form-control" id="Title" name="Title" value="@Model.Title">
+    </div>
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <textarea class="form-control" id="Description" name="Description">@Model.Description</textarea>
+    </div>
+    <div class="form-group">
+        <label for="Duration">Duration</label>
+        <input type="number" class="form-control" id="Duration" name="Duration" value="@Model.Duration">
+    </div>
+    <div class="form-group">
+        <label for="Instructions">Instructions</label>
+        <textarea class="form-control" id="Instructions" name="Instructions">@Model.Instructions</textarea>
+    </div>
+    <div class="form-group">
+        <label for="VideoUrl">Video URL</label>
+        <input type="text" class="form-control" id="VideoUrl" name="VideoUrl" value="@Model.VideoUrl">
+    </div>
+    <div class="form-group">
+        <label asp-for="ImageUrl">Image URL</label>
+        <input type="text" class="form-control" id="ImageUrl" name="ImageUrl" placeholder="Enter image URL">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Tutorial</button>
+</form>

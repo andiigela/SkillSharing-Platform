@@ -16,6 +16,8 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 
+builder.Services.AddScoped<ITutorialRepository, TutorialRepository>();
+builder.Services.AddScoped<ITutorialService, TutorialService>();
 builder.Services.AddScoped<ILessonRepository<Lesson>, LessonRepository>();
 builder.Services.AddScoped<IServiceLesson, ServiceLesson>();
 
@@ -71,20 +73,24 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Roles}/{action=Index}");
-});
-app.UseEndpoints(endpoints =>
-{
+      name: "default",
+      pattern: "{controller=Home}/{action=Index}/{id?}");
+
     endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Roles}/{action=Create}");
-});
-app.UseEndpoints(endpoints =>
-{
+      name: "tutorial",
+      pattern: "{controller=Tutorial}/{action=Index}/{id?}");
+
     endpoints.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Roles}/{action=Delete}");
+      name: "default",
+      pattern: "{controller=Roles}/{action=Index}");
+
+    endpoints.MapControllerRoute(
+      name: "default",
+      pattern: "{controller=Roles}/{action=Create}");
+
+    endpoints.MapControllerRoute(
+      name: "default",
+      pattern: "{controller=Roles}/{action=Delete}");
 });
 
 
