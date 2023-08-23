@@ -18,7 +18,9 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddScoped<ILessonRepository<Lesson>, LessonRepository>();
 builder.Services.AddScoped<IServiceLesson, ServiceLesson>();
-
+builder.Services.AddScoped<IWorkshopRepository<Workshop>, WorkshopRepository>();
+builder.Services.AddScoped<IServiceWorkshop, ServiceWorkshop>();
+builder.Services.AddScoped<IServiceUploadImage, ServiceUploadImage>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("SkillSharingApp")));
