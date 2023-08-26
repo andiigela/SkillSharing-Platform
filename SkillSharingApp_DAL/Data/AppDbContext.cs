@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SkillSharingApp_DAL.DAL_DTOs.ApplicationUser;
 using SkillSharingApp_DAL.Models;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,7 @@ namespace SkillSharingApp_DAL.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<Workshop> Workshops { get; set; }
+        public DbSet<CreateApplicationUserDto_DAL> CreateApplicationUserDto_DAL { get; set; }
+
     }
 }

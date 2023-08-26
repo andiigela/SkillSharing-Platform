@@ -9,6 +9,7 @@ using SkillSharingApp_DAL.Models;
 using SkillSharingApp_DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using SkillSharingApp_DAL.DAL_DTOs.ApplicationUser;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,9 @@ builder.Services.AddScoped<IServiceLesson, ServiceLesson>();
 builder.Services.AddScoped<IWorkshopRepository<Workshop>, WorkshopRepository>();
 builder.Services.AddScoped<IServiceWorkshop, ServiceWorkshop>();
 builder.Services.AddScoped<IServiceUploadImage, ServiceUploadImage>();
+builder.Services.AddScoped<IServiceApplicationUser, ServiceApplicationUser>();
+builder.Services.AddScoped<IApplicationUserRepository<CreateApplicationUserDto_DAL>, ApplicationUserRepository>();
+
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("SkillSharingApp")));
