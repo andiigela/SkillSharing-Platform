@@ -1,7 +1,9 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
+using SkillSharingApp_BAL.DTOs;
 using SkillSharingApp_BAL.Services;
+using Microsoft.AspNetCore.Identity;
 using SkillSharingApp.Models;
 
 namespace SkillSharingApp.Controllers
@@ -63,7 +65,7 @@ namespace SkillSharingApp.Controllers
             {
                 ModelState.AddModelError(string.Empty, "An error occurred while saving the tutorial: " + ex.Message);
             }
-    
+
             return View(tutorial);
         }
 
@@ -84,16 +86,16 @@ namespace SkillSharingApp.Controllers
         [HttpPost]
         public IActionResult Edit(TutorialDto tutorial)
         {
-            
-                try
-                {
-                    _tutorialService.UpdateTutorial(tutorial);
-                    TempData["SuccessMessage"] = "Tutorial updated successfully.";
-                    return RedirectToAction("Index");
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError(string.Empty, "An error occurred while updating the tutorial: " + ex.Message);
+
+            try
+            {
+                _tutorialService.UpdateTutorial(tutorial);
+                TempData["SuccessMessage"] = "Tutorial updated successfully.";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "An error occurred while updating the tutorial: " + ex.Message);
             }
 
             return View(tutorial);
@@ -129,6 +131,5 @@ namespace SkillSharingApp.Controllers
             tutorial.Comments = commentDtos.ToList();
             return View(tutorial);
         }
-        /* Delete and Details */
     }
 }

@@ -9,6 +9,7 @@ using SkillSharingApp_DAL.Models;
 using SkillSharingApp_DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using SkillSharingApp_BAL.MappingProfiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,10 @@ builder.Services.AddScoped<ILessonRepository<Lesson>, LessonRepository>();
 builder.Services.AddScoped<IServiceLesson, ServiceLesson>();
 
 
+
+builder.Services.AddAutoMapper(typeof(SkillSharingApp.RequestHelpers.MappingProfiles).Assembly);
+builder.Services.AddAutoMapper(typeof(SkillSharingApp.RequestHelpers.MappingProfiles).Assembly);
+builder.Services.AddAutoMapper(typeof(TutorialProfile).Assembly);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("SkillSharingApp")));
 
