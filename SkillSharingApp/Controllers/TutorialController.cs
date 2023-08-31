@@ -5,6 +5,7 @@ using SkillSharingApp_BAL.DTOs;
 using SkillSharingApp_BAL.Services;
 using Microsoft.AspNetCore.Identity;
 using SkillSharingApp.Models;
+using SkillSharingApp.BLL.Services;
 
 namespace SkillSharingApp.Controllers
 {

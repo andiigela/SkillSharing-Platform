@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Identity;
-using SkillSharingApp_DAL.Models;
+﻿using SkillSharingApp_DAL.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SkillSharingApp.Models
+namespace SkillSharingApp_DAL.DAL_DTOs.ApplicationUser
 {
-    public class ApplicationUser : IdentityUser
+    public class CreateApplicationUserDto_DAL
     {
+        public string Id { get; set; }
         public byte[]? ProfilePicture { get; set; }
         public string? FirstName { get; set; }
         public string? Lastname { get; set; }
