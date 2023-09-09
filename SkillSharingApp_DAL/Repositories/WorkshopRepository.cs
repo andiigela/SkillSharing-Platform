@@ -57,7 +57,6 @@ namespace SkillSharingApp_DAL.Repositories
         {
             return _context.Workshops
                 .Include(w => w.Attendances)
-                .Include(w => w.Bookmarks)
                 .Where(w => w.CreateApplicationUserDto_DALId != userId)
                 .Where(w => w.Title.Contains(name) && w.isVisible == 1)
                 .ToList();

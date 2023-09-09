@@ -12,7 +12,6 @@ namespace SkillSharingApp_DAL.DAL_DTOs.ApplicationUser
         public bool ComputerScience { get; set; }
         public bool Math { get; set; }
         public bool Medicine { get; set; }
-        public virtual List<Bookmark>? Bookmarks { get; set; } = new();
         [NotMapped]
         public virtual List<Attendance> Attendances { get; set; } = new();
         public virtual List<Workshop> Workshops { get; set; } = new();

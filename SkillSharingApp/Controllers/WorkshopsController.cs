@@ -11,18 +11,19 @@ namespace SkillSharingApp.Controllers
     {
         private readonly IServiceWorkshop _serviceWorkshop;
         private readonly IServiceApplicationUser _serviceApplicationUser;
-        private readonly IServiceAttendance _serviceAttendances;
+        //private readonly IServiceAttendance _serviceAttendances;
         private readonly ApplicationManager _userManager;
         public WorkshopsController(IServiceWorkshop serviceWorkshop,
             IServiceApplicationUser serviceApplicationUser,
-            ApplicationManager userManager,
-            IServiceAttendance serviceAttendances
+            ApplicationManager userManager
+            
+            //IServiceAttendance serviceAttendances
             )
         {
             _serviceWorkshop = serviceWorkshop;
             _serviceApplicationUser = serviceApplicationUser;
             _userManager = userManager;
-            _serviceAttendances = serviceAttendances;
+         //   _serviceAttendances = serviceAttendances;
         }
         [Authorize]
         public async Task<IActionResult> Index()
@@ -117,6 +118,7 @@ namespace SkillSharingApp.Controllers
             _serviceWorkshop.DeleteWorkshopImage(workshopId, imageId);
             return RedirectToAction("Edit", new { id = workshopId });
         }
+        /*
         [Authorize]
         [HttpGet]
         public IActionResult Attendances(int workshopId)
@@ -136,6 +138,7 @@ namespace SkillSharingApp.Controllers
         {
             return View();
         }
+        */
 
     }
 }

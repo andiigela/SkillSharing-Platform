@@ -20,7 +20,6 @@ namespace SkillSharingApp_DAL.Models
         public virtual List<Attendance>? Attendances { get; set; } = new();
         public string? CreateApplicationUserDto_DALId { get; set; }
         public CreateApplicationUserDto_DAL? CreateApplicationUserDto_DAL { get; set; }
-        public List<Bookmark>? Bookmarks { get; set; }
 
         public void AddImageToWorkshop(IServiceUploadImage _uploadImage)
         {
