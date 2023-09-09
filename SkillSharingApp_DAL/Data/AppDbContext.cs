@@ -14,6 +14,11 @@ namespace SkillSharingApp_DAL.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<Workshop> Workshops { get; set; }
         public DbSet<CreateApplicationUserDto_DAL> CreateApplicationUserDto_DAL { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Attendance>()
+                .HasKey(a => new { a.CreateApplicationUserDto_DALId, a.WorkshopId });
+        }
 
     }
 }
