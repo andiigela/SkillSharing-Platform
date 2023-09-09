@@ -25,6 +25,9 @@ builder.Services.AddScoped<IServiceWorkshop, ServiceWorkshop>();
 builder.Services.AddScoped<IServiceUploadImage, ServiceUploadImage>();
 builder.Services.AddScoped<IServiceApplicationUser, ServiceApplicationUser>();
 builder.Services.AddScoped<IApplicationUserRepository<CreateApplicationUserDto_DAL>, ApplicationUserRepository>();
+builder.Services.AddScoped<IServiceAttendance, ServiceAttendance>();
+builder.Services.AddScoped<IAttendanceRepository<Attendance>, AttendanceRepository>();
+
 
 builder.Services.AddDbContext<AppDbContext>(options =>
   options.UseSqlServer(connectionString, b => b.MigrationsAssembly("SkillSharingApp")));
