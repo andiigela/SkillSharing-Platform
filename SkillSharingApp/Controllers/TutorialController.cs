@@ -5,22 +5,19 @@ using SkillSharingApp_BAL.DTOs;
 using SkillSharingApp_BAL.Services;
 using Microsoft.AspNetCore.Identity;
 using SkillSharingApp.Models;
-using SkillSharingApp.BLL.Services;
 
 namespace SkillSharingApp.Controllers
 {
     public class TutorialController : Controller
     {
         private readonly ITutorialService _tutorialService;
-        private readonly ICommentService _commentService;
         private readonly IMapper _mapper;
         private readonly UserManager<ApplicationUser> _userManager;
 
 
-        public TutorialController(ITutorialService tutorialService, ICommentService commentService, IMapper mapper, UserManager<ApplicationUser> userManager)
+        public TutorialController(ITutorialService tutorialService, IMapper mapper, UserManager<ApplicationUser> userManager)
         {
             _tutorialService = tutorialService;
-            _commentService = commentService;
             _mapper = mapper;
             _userManager = userManager;
         }
@@ -127,9 +124,6 @@ namespace SkillSharingApp.Controllers
             {
                 return NotFound();
             }
-
-            var commentDtos = _commentService.GetCommentsByTutorialId(id);
-            tutorial.Comments = commentDtos.ToList();
             return View(tutorial);
         }
     }

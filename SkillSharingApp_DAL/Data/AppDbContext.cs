@@ -12,7 +12,6 @@ namespace SkillSharingApp_DAL.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<Tutorial> Tutorials { get; set; }
-        public DbSet<Comment> Comments { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
 
     }

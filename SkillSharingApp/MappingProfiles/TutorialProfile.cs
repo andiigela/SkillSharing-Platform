@@ -18,7 +18,6 @@ namespace SkillSharingApp_BAL.MappingProfiles
                 .ForMember(dest => dest.VideoUrl, opt => opt.MapFrom(src => src.VideoUrl))
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ImageUrl))
                 .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId))
-                .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments.ToList()))
                 .ReverseMap();
         }
     }

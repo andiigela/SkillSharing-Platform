@@ -51,15 +51,12 @@
                         <td>
                             <a class="btn btn-primary" href="@Url.Action("Details", "Tutorial", new { id = tutorial.Id })">Watch Tutorial</a>
                         </td>
-                        @if (User.Identity.IsAuthenticated && tutorial.UserId == UserManager.FindByNameAsync(User.Identity.Name)?.Result.Id)
-                        {
-                            <td>
-                                <a class="btn btn-primary" href="@Url.Action("Edit", "Tutorial", new { id = tutorial.Id })">Edit</a>
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_@tutorial.Id">Delete</button>
-                            </td>
-                        }
+                        <td>
+                            <a class="btn btn-primary" href="@Url.Action("Edit", "Tutorial", new { id = tutorial.Id })">Edit</a>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_@tutorial.Id">Delete</button>
+                        </td>
                     </tr>
 
                     <div class="modal fade" id="confirmDeleteModal_@tutorial.Id" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">

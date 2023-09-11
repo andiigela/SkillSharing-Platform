@@ -30,6 +30,5 @@ namespace SkillSharingApp_DAL.Models
         [ForeignKey("UserId")]
         public string? UserId { get; set; }
 
-        public ICollection<Comment>? Comments { get; set; }
     }
 }

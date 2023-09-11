@@ -20,7 +20,6 @@ namespace SkillSharingApp_DAL.Repositories
         public IEnumerable<Tutorial> GetAllTutorials()
         {
             return _context.Tutorials
-                .Include(t => t.Comments)
                 .Include(t => t.UserId)
                 .ToList();
         }

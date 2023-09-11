@@ -10,8 +10,6 @@ using SkillSharingApp_DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using SkillSharingApp_BAL.MappingProfiles;
-using SkillSharingApp.BLL.Services;
-using SkillSharingApp.DAL.Repositories;
 using SkillSharingApp.Models;
 using SkillSharingApp_DAL.DAL_DTOs.ApplicationUser;
 
@@ -25,11 +23,6 @@ builder.Services.AddScoped<ILessonRepository<Lesson>, LessonRepository>();
 builder.Services.AddScoped<IServiceLesson, ServiceLesson>();
 builder.Services.AddScoped<ITutorialRepository, TutorialRepository>();
 builder.Services.AddScoped<ITutorialService, TutorialService>();
-
-builder.Services.AddScoped<CommentRepository>();
-builder.Services.AddScoped<ICommentRepository>(provider => provider.GetService<CommentRepository>());
-builder.Services.AddScoped<CommentService>();
-builder.Services.AddScoped<ICommentService>(provider => provider.GetService<CommentService>());
 
 builder.Services.AddAutoMapper(typeof(SkillSharingApp.RequestHelpers.MappingProfiles).Assembly);
 builder.Services.AddAutoMapper(typeof(SkillSharingApp.RequestHelpers.MappingProfiles).Assembly);

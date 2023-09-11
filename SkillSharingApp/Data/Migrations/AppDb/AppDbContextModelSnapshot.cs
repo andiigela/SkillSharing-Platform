@@ -22,46 +22,6 @@ namespace SkillSharingApp.Migrations.AppDb
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("SkillSharingApp_DAL.Models.Comment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsEdited")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Lastname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TutorialId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TutorialId");
-
-                    b.ToTable("Comments");
-                });
-
             modelBuilder.Entity("SkillSharingApp_DAL.Models.Lesson", b =>
                 {
                     b.Property<int>("Id")
@@ -126,22 +86,6 @@ namespace SkillSharingApp.Migrations.AppDb
                     b.HasKey("TutorialId");
 
                     b.ToTable("Tutorials");
-                });
-
-            modelBuilder.Entity("SkillSharingApp_DAL.Models.Comment", b =>
-                {
-                    b.HasOne("SkillSharingApp_DAL.Models.Tutorial", "Tutorial")
-                        .WithMany("Comments")
-                        .HasForeignKey("TutorialId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Tutorial");
-                });
-
-            modelBuilder.Entity("SkillSharingApp_DAL.Models.Tutorial", b =>
-                {
-                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

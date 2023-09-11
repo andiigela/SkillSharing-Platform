@@ -39,10 +39,6 @@ namespace SkillSharingApp_BAL.Services
             };
 
             // Map the comments from TutorialDto to Comment and add to the tutorialEntity
-            tutorialEntity.Comments = tutorial.Comments.Select(c => new Comment
-            {
-                // Map the properties of CommentDto to Comment as needed
-            }).ToList();
 
             _tutorialRepository.AddTutorial(tutorialEntity);
             _tutorialRepository.SaveChanges();
