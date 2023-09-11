@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\AttendedWorkshops\Index.cshtml" />
     <None Include="Views\Workshops\Attendances.cshtml" />
     <None Include="Views\Workshops\Create.cshtml" />
     <None Include="Views\Workshops\Edit.cshtml" />
@@ -40,6 +41,10 @@
   <ItemGroup>
     <ProjectReference Include="..\SkillSharingApp_BAL\SkillSharingApp_BAL.csproj" />
     <ProjectReference Include="..\SkillSharingApp_DAL\SkillSharingApp_DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SkillSharingApp.Migrations
 {
-    public partial class AddEntities : Migration
+    public partial class AddIdentity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
