@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <None Include="Views\AttendedWorkshops\Index.cshtml" />
+    <None Include="Views\FindWorkshops\Index.cshtml" />
+    <None Include="Views\FindWorkshops\SearchName.cshtml" />
     <None Include="Views\Workshops\Attendances.cshtml" />
     <None Include="Views\Workshops\Create.cshtml" />
     <None Include="Views\Workshops\Edit.cshtml" />
