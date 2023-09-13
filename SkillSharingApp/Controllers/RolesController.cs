@@ -14,12 +14,12 @@ namespace SkillSharingApp.Controllers
             this.roleManager = roleManager;
             this.userManager = userManager;
         }
-        [Authorize(Roles = "Admin")]
+      //  [Authorize(Roles = "Admin")]
         public ViewResult Index()
         {
             return View(roleManager.Roles);
         }
-        [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -29,7 +29,7 @@ namespace SkillSharingApp.Controllers
             foreach (IdentityError error in result.Errors)
                 ModelState.AddModelError("", error.Description);
         }
-        [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(string name)
         {
@@ -48,7 +48,7 @@ namespace SkillSharingApp.Controllers
             return View(name);
         }
 
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(string id)
         {
             IdentityRole role = await roleManager.FindByIdAsync(id);
@@ -66,7 +66,7 @@ namespace SkillSharingApp.Controllers
                 NonMembers = nonMembers
             });
         }
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Update(RoleModification model)
         {
@@ -100,7 +100,7 @@ namespace SkillSharingApp.Controllers
             else
                 return await Update(model.RoleId);
         }
-        [Authorize(Roles = "Admin")]
+      //  [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
@@ -109,7 +109,7 @@ namespace SkillSharingApp.Controllers
             return View(role);
         }
 
-        [Authorize(Roles = "Admin")]
+      //  [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {

@@ -117,7 +117,7 @@ namespace SkillSharingApp.Controllers
             _serviceWorkshop.DeleteWorkshopImage(workshopId, imageId);
             return RedirectToAction("Edit", new { id = workshopId });
         }
-        /*
+        
         [Authorize]
         [HttpGet]
         public IActionResult Attendances(int workshopId)
@@ -136,8 +136,7 @@ namespace SkillSharingApp.Controllers
         public IActionResult WorkshopNotFound()
         {
             return View();
-        }
-        */
 
+        }
     }
 }
