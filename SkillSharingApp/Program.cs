@@ -78,19 +78,19 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Roles}/{action=Index}");
+        pattern: "{controller=RolesController}/{action=Index}");
 });
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Roles}/{action=Create}");
+        pattern: "{controller=RolesController}/{action=Create}");
 });
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Roles}/{action=Delete}");
+        pattern: "{controller=RolesController}/{action=Delete}");
 });
 
 

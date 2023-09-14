@@ -8,18 +8,18 @@ namespace SkillSharingApp.Controllers
     public class RolesController : Controller
     {
         private RoleManager<IdentityRole> roleManager;
-        private UserManager<IdentityUser> userManager;
-        public RolesController(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        private UserManager<ApplicationUser> userManager;
+        public RolesController(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             this.roleManager = roleManager;
             this.userManager = userManager;
         }
-      //  [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         public ViewResult Index()
         {
             return View(roleManager.Roles);
         }
-       // [Authorize(Roles = "Admin")]
+      //  [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
@@ -29,7 +29,7 @@ namespace SkillSharingApp.Controllers
             foreach (IdentityError error in result.Errors)
                 ModelState.AddModelError("", error.Description);
         }
-       // [Authorize(Roles = "Admin")]
+      //  [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(string name)
         {
@@ -48,13 +48,13 @@ namespace SkillSharingApp.Controllers
             return View(name);
         }
 
-        //[Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(string id)
         {
             IdentityRole role = await roleManager.FindByIdAsync(id);
-            List<IdentityUser> members = new List<IdentityUser>();
-            List<IdentityUser> nonMembers = new List<IdentityUser>();
-            foreach (IdentityUser user in userManager.Users)
+            List<ApplicationUser> members = new List<ApplicationUser>();
+            List<ApplicationUser> nonMembers = new List<ApplicationUser>();
+            foreach (ApplicationUser user in userManager.Users)
             {
                 var list = await userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
                 list.Add(user);
@@ -66,7 +66,7 @@ namespace SkillSharingApp.Controllers
                 NonMembers = nonMembers
             });
         }
-        //[Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Update(RoleModification model)
         {
@@ -75,7 +75,7 @@ namespace SkillSharingApp.Controllers
             {
                 foreach (string userId in model.AddIds ?? new string[] { })
                 {
-                    IdentityUser user = await userManager.FindByIdAsync(userId);
+                    ApplicationUser user = await userManager.FindByIdAsync(userId);
                     if (user != null)
                     {
                         result = await userManager.AddToRoleAsync(user, model.RoleName);
@@ -85,7 +85,7 @@ namespace SkillSharingApp.Controllers
                 }
                 foreach (string userId in model.DeleteIds ?? new string[] { })
                 {
-                    IdentityUser user = await userManager.FindByIdAsync(userId);
+                    ApplicationUser user = await userManager.FindByIdAsync(userId);
                     if (user != null)
                     {
                         result = await userManager.RemoveFromRoleAsync(user, model.RoleName);
@@ -94,7 +94,6 @@ namespace SkillSharingApp.Controllers
                     }
                 }
             }
-
             if (ModelState.IsValid)
                 return RedirectToAction(nameof(Index));
             else
@@ -108,8 +107,7 @@ namespace SkillSharingApp.Controllers
             if (role == null) return NotFound();
             return View(role);
         }
-
-      //  [Authorize(Roles = "Admin")]
+       // [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
