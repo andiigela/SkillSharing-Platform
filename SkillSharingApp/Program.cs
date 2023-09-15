@@ -11,12 +11,19 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using SkillSharingApp_DAL.DAL_DTOs.ApplicationUser;
 using SkillSharingApp.Models;
+using SkillSharingApp.BLL.Services;
+using SkillSharingApp.DAL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
+
+builder.Services.AddScoped<CommentRepository>();
+builder.Services.AddScoped<ICommentRepository>(provider => provider.GetService<CommentRepository>());
+builder.Services.AddScoped<CommentService>();
+builder.Services.AddScoped<ICommentService>(provider => provider.GetService<CommentService>());
 
 
 

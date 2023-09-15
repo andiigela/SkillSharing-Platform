@@ -56,6 +56,9 @@
     <None Include="Areas\Identity\Pages\_ViewImports.cshtml" />
     <None Include="Areas\Identity\Pages\_ViewStart.cshtml" />
     <None Include="Views\AttendedWorkshops\Index.cshtml" />
+    <None Include="Views\Comment\ConfirmDeleteComment.cshtml" />
+    <None Include="Views\Comment\DeleteComment.cshtml" />
+    <None Include="Views\Comment\EditComment.cshtml" />
     <None Include="Views\FindWorkshops\Index.cshtml" />
     <None Include="Views\FindWorkshops\SearchName.cshtml" />
     <None Include="Views\Roles\Create.cshtml" />
