@@ -5,13 +5,12 @@
     ViewData["Title"] = "Workshops";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
-<form asp-controller="Roles" asp-action="DeleteConfirmed" method="post">
+<a asp-action="Index" class="btn btn-secondary">Back</a>
+<form asp-controller="Roles" asp-action="DeleteConfirmed" method="post" style="margin-bottom:350px;">
     <div class="form-group">
         <input type="text" asp-for="Id" class="form-control" hidden id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Name">
-
         <label asp-for="Name" for="exampleInputEmail1">Name</label>
-        <input asp-for="Name"  type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        <input asp-for="Name" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
     </div>
     <button type="submit">Delete</button>
-
 </form>

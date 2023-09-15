@@ -1,0 +1,95 @@
+﻿@using SkillSharingApp_DAL.Models
+@model List<Workshop>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Workshops";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="~/css/workshops.css">
+<div class="main-content" style="margin-top: -50px;margin-bottom: 150px">
+    <div class="container mt-7">
+        <!-- Table -->
+        <div class="row mt-5">
+            <div class="col">
+                <div class="card bg-default shadow">
+                    <div class="d-flex justify-content-between">
+                        <div class="card-header bg-transparent border-0">
+                            <h3 class="text-white mb-0">My Workshops</h3>
+                        </div>
+                        <div class="card-header bg-transparent border-0">
+                            <a asp-action="Create"><button class="btn btn-primary" style="background-color: rgb(69, 204, 106)">Create</button></a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-dark table-flush">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Duration</th>
+                                    <th scope="col">Location</th>
+                                    <th scope="col">Capacity</th>
+                                    <th scope="col">Expiration Date</th>
+                                    <th scope="col">Visibility</th>
+                                    <th scope="col">Actions</th>
+                                    <th scope="col">Attendances</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Count > 0)
+                                {
+                                    @foreach (var workshop in Model)
+                                    {
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="media align-items-center">
+                                                    <a href="#" class="avatar rounded-circle mr-3">
+                                                        <img alt="Image placeholder" src="https://img.freepik.com/premium-vector/w-logo-design-template-creative-w-icon-initials-based-letters-vector_487414-2792.jpg?w=2000">
+                                                    </a>
+                                                    <div class="media-body">
+                                                        <span class="mb-0 text-sm">@workshop.Title</span>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <td>
+                                                @workshop.Duration minutes
+                                            </td>
+                                            <td>
+                                                @workshop.Location
+                                            </td>
+                                            <td>
+                                                @workshop.Capacity pieces
+                                            </td>
+                                            <td>
+                                                @workshop.Availability
+                                            </td>
+                                            <td>
+                                                <span class="badge badge-dot">
+                                                    @Html.Raw(workshop.isVisible == 1
+                                            ? "<i class=\"bg-success\"></i><span>Public</span>"
+                                            : "<i class=\"bg-danger\"></i><span>Private</span>")
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div style="display:flex">
+                                                    <a asp-action="Edit" asp-route-id="@workshop.Id"><button type="submit" class="btn btn-warning actions" style="margin-right: 3px;">Edit</button></a>
+                                                    <form method="post" asp-action="Delete" asp-route-id="@workshop.Id">
+                                                        <button type="submit" class="btn btn-danger actions">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a asp-controller="Workshops" asp-action="Attendances" asp-route-workshopId="@workshop.Id"><button class="btn btn-primary actions">Attendances List</button></a>
+                                            </td>
+                                        </tr>
+
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

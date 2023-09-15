@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authentication.Google;
 using SkillSharingApp_BAL.MappingProfiles;
 using SkillSharingApp.Models;
 using SkillSharingApp_DAL.DAL_DTOs.ApplicationUser;
+using SkillSharingApp_DAL.DAL_DTOs.ApplicationUser;
+using SkillSharingApp.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +29,17 @@ builder.Services.AddScoped<ITutorialService, TutorialService>();
 builder.Services.AddAutoMapper(typeof(SkillSharingApp.RequestHelpers.MappingProfiles).Assembly);
 builder.Services.AddAutoMapper(typeof(SkillSharingApp.RequestHelpers.MappingProfiles).Assembly);
 builder.Services.AddAutoMapper(typeof(TutorialProfile).Assembly);
+
+
+builder.Services.AddScoped<IWorkshopRepository<Workshop>, WorkshopRepository>();
+builder.Services.AddScoped<IServiceWorkshop, ServiceWorkshop>();
+builder.Services.AddScoped<IServiceUploadImage, ServiceUploadImage>();
+builder.Services.AddScoped<IServiceApplicationUser, ServiceApplicationUser>();
+builder.Services.AddScoped<IApplicationUserRepository<CreateApplicationUserDto_DAL>, ApplicationUserRepository>();
+builder.Services.AddScoped<IServiceAttendance, ServiceAttendance>();
+builder.Services.AddScoped<IAttendanceRepository<Attendance>, AttendanceRepository>();
+
+
 builder.Services.AddDbContext<AppDbContext>(options =>
   options.UseSqlServer(connectionString, b => b.MigrationsAssembly("SkillSharingApp")));
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -44,6 +57,7 @@ builder.Services.AddAuthentication()
       g.ClientId = "635903647141-rlbub16bpd0tgo3g5t3emen7vhgeorq8.apps.googleusercontent.com";
       g.ClientSecret = "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";
   });
+
 builder.Services.AddAuthorization();
 
 
@@ -92,6 +106,20 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
       name: "default",
       pattern: "{controller=Roles}/{action=Delete}");
+        name: "default",
+        pattern: "{controller=RolesController}/{action=Index}");
+});
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=RolesController}/{action=Create}");
+});
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=RolesController}/{action=Delete}");
 });
 
 

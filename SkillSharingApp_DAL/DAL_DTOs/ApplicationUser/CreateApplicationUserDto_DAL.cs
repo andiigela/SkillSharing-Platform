@@ -1,4 +1,4 @@
-﻿using SkillSharingApp_DAL.Models;
+using SkillSharingApp_DAL.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SkillSharingApp_DAL.DAL_DTOs.ApplicationUser
@@ -12,5 +12,8 @@ namespace SkillSharingApp_DAL.DAL_DTOs.ApplicationUser
         public bool ComputerScience { get; set; }
         public bool Math { get; set; }
         public bool Medicine { get; set; }
+        [NotMapped]
+        public virtual List<Attendance> Attendances { get; set; } = new();
+        public virtual List<Workshop> Workshops { get; set; } = new();
     }
 }

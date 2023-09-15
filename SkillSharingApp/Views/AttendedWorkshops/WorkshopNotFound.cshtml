@@ -1,0 +1,8 @@
+﻿@{
+    ViewData["Title"] = "Attended Workshops";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+    var i = 1;
+}
+@if(!User.Identity.IsAuthenticated){
+    <h1 style="margin-bottom: 300px;">User must be logged in!</h1>
+}
