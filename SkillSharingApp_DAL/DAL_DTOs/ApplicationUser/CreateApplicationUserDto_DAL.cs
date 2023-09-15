@@ -1,4 +1,4 @@
-﻿using SkillSharingApp_DAL.Models;
+using SkillSharingApp_DAL.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SkillSharingApp_DAL.DAL_DTOs.ApplicationUser

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using SkillSharingApp_DAL.Models;
 using System.ComponentModel.DataAnnotations.Schema;
 
