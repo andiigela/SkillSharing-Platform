@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -15,6 +15,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Tutorial\Create.cshtml" />
+    <None Include="Views\Tutorial\Edit.cshtml" />
+    <None Include="Views\Tutorial\Index.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <None Include="Areas\Identity\Pages\Account\AccessDenied.cshtml" />
     <None Include="Areas\Identity\Pages\Account\ConfirmEmail.cshtml" />
     <None Include="Areas\Identity\Pages\Account\ConfirmEmailChange.cshtml" />
@@ -258,8 +266,10 @@
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="6.0.21" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.20" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.18" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.18" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.18" />

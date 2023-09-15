@@ -9,6 +9,9 @@ using SkillSharingApp_DAL.Models;
 using SkillSharingApp_DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using SkillSharingApp_BAL.MappingProfiles;
+using SkillSharingApp.Models;
+using SkillSharingApp_DAL.DAL_DTOs.ApplicationUser;
 using SkillSharingApp_DAL.DAL_DTOs.ApplicationUser;
 using SkillSharingApp.Models;
 
@@ -18,6 +21,14 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 
+builder.Services.AddScoped<ILessonRepository<Lesson>, LessonRepository>();
+builder.Services.AddScoped<IServiceLesson, ServiceLesson>();
+builder.Services.AddScoped<ITutorialRepository, TutorialRepository>();
+builder.Services.AddScoped<ITutorialService, TutorialService>();
+
+builder.Services.AddAutoMapper(typeof(SkillSharingApp.RequestHelpers.MappingProfiles).Assembly);
+builder.Services.AddAutoMapper(typeof(SkillSharingApp.RequestHelpers.MappingProfiles).Assembly);
+builder.Services.AddAutoMapper(typeof(TutorialProfile).Assembly);
 
 
 builder.Services.AddScoped<IWorkshopRepository<Workshop>, WorkshopRepository>();
@@ -77,6 +88,24 @@ app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
+      name: "default",
+      pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    endpoints.MapControllerRoute(
+      name: "tutorial",
+      pattern: "{controller=Tutorial}/{action=Index}/{id?}");
+
+    endpoints.MapControllerRoute(
+      name: "default",
+      pattern: "{controller=Roles}/{action=Index}");
+
+    endpoints.MapControllerRoute(
+      name: "default",
+      pattern: "{controller=Roles}/{action=Create}");
+
+    endpoints.MapControllerRoute(
+      name: "default",
+      pattern: "{controller=Roles}/{action=Delete}");
         name: "default",
         pattern: "{controller=RolesController}/{action=Index}");
 });
