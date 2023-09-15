@@ -1,4 +1,5 @@
 ﻿@using SkillSharingApp.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model RoleEdit
 @using Microsoft.AspNetCore.Identity;
 @{
@@ -9,7 +10,7 @@
 <a asp-action="Index" class="btn btn-secondary">Back</a>
 <div asp-validation-summary="All" class="text-danger"></div>
 
-<form method="post">
+<form method="post" style="margin-bottom:350px">
     <input type="hidden" name="roleName" value="@Model.Role.Name" />
     <input type="hidden" name="roleId" value="@Model.Role.Id" />
 
@@ -21,7 +22,7 @@
         }
         else
         {
-            @foreach (IdentityUser user in Model.NonMembers)
+            @foreach (ApplicationUser user in Model.NonMembers)
             {
                         <tr>
                             <td>@user.UserName</td>
@@ -41,7 +42,7 @@
         }
         else
         {
-            @foreach (IdentityUser user in Model.Members)
+            @foreach (ApplicationUser user in Model.Members)
             {
                         <tr>
                             <td>@user.UserName</td>

@@ -9,6 +9,8 @@ using SkillSharingApp_DAL.Models;
 using SkillSharingApp_DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using SkillSharingApp_DAL.DAL_DTOs.ApplicationUser;
+using SkillSharingApp.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,30 +18,34 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 
-builder.Services.AddScoped<ILessonRepository<Lesson>, LessonRepository>();
-builder.Services.AddScoped<IServiceLesson, ServiceLesson>();
+
+
+builder.Services.AddScoped<IWorkshopRepository<Workshop>, WorkshopRepository>();
+builder.Services.AddScoped<IServiceWorkshop, ServiceWorkshop>();
+builder.Services.AddScoped<IServiceUploadImage, ServiceUploadImage>();
+builder.Services.AddScoped<IServiceApplicationUser, ServiceApplicationUser>();
+builder.Services.AddScoped<IApplicationUserRepository<CreateApplicationUserDto_DAL>, ApplicationUserRepository>();
+builder.Services.AddScoped<IServiceAttendance, ServiceAttendance>();
+builder.Services.AddScoped<IAttendanceRepository<Attendance>, AttendanceRepository>();
 
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString, b => b.MigrationsAssembly("SkillSharingApp")));
-
+  options.UseSqlServer(connectionString, b => b.MigrationsAssembly("SkillSharingApp")));
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+  options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+  .AddRoles<IdentityRole>()
+  .AddUserManager<ApplicationManager>()
+  .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<RoleManager<IdentityRole>>();
-
-
 builder.Services.AddAuthentication()
-    .AddGoogle(g =>
-    {
-        g.ClientId = "635903647141-rlbub16bpd0tgo3g5t3emen7vhgeorq8.apps.googleusercontent.com";
-        g.ClientSecret = "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";
-    });
+  .AddGoogle(g =>
+  {
+      g.ClientId = "635903647141-rlbub16bpd0tgo3g5t3emen7vhgeorq8.apps.googleusercontent.com";
+      g.ClientSecret = "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";
+  });
 
 builder.Services.AddAuthorization();
 
@@ -72,19 +78,19 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Roles}/{action=Index}");
+        pattern: "{controller=RolesController}/{action=Index}");
 });
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Roles}/{action=Create}");
+        pattern: "{controller=RolesController}/{action=Create}");
 });
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Roles}/{action=Delete}");
+        pattern: "{controller=RolesController}/{action=Delete}");
 });
 
 

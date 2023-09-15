@@ -1,0 +1,111 @@
+﻿@using SkillSharingApp_DAL.Models
+@using SkillSharingApp.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Security.Claims
+@model List<Workshop>
+@{
+    ViewData["Title"] = "FindWorkshops";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<link href="~/css/font-face.css" rel="stylesheet" media="all">
+<link href="~/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" media="all">
+<link href="~/vendor/font-awesome-5/css/fontawesome-all.min.css" rel="stylesheet" media="all">
+<link href="~/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" media="all">
+
+<!-- Bootstrap CSS-->
+<link href="~/vendor/bootstrap-4.1/bootstrap.min.css" rel="stylesheet" media="all">
+
+<!-- Vendor CSS-->
+<link href="~/vendor/animsition/animsition.min.css" rel="stylesheet" media="all">
+<link href="~/vendor/bootstrap-progressbar/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet" media="all">
+<link href="~/vendor/wow/animate.css" rel="stylesheet" media="all">
+<link href="~/vendor/css-hamburgers/hamburgers.min.css" rel="stylesheet" media="all">
+<link href="~/vendor/slick/slick.css" rel="stylesheet" media="all">
+<link href="~/vendor/select2/select2.min.css" rel="stylesheet" media="all">
+<link href="~/vendor/perfect-scrollbar/perfect-scrollbar.css" rel="stylesheet" media="all">
+<!-- Main CSS-->
+<link href="~/css/theme.css" rel="stylesheet" media="all">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="~/css/searchbar.css">
+
+
+<div class="d-flex justify-content-center h-100">
+    <div class="search">
+        <form method="get" asp-action="SearchName">
+            <input type="search" class="search-input" placeholder="search..." name="name">
+            <a href="#" class="search-icon">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </a>
+        </form>
+    </div>
+</div>
+
+<div class="row" style="margin-top: 40px;margin-bottom: 350px;">
+    <div class="col-md-12">
+        <div class="table-responsive table-responsive-data2">
+            <table class="table table-data2">
+                <thead>
+                    <tr>
+                        <th>
+                            <label class="au-checkbox">
+                                <input type="checkbox">
+                                <span class="au-checkmark"></span>
+                            </label>
+                        </th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Duration</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Availability</th>
+                        <th scope="col">Capacity</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Count > 0)
+                    {
+                        @foreach (var workshop in Model)
+                        {
+                            <tr class="tr-shadow" style="border-bottom: 5px solid white" ;>
+                                <td style="background-color: rgb(82, 157, 255);">
+                                    <label class="au-checkbox">
+                                        <input type="checkbox">
+                                        <span class="au-checkmark"></span>
+                                    </label>
+                                </td>
+                                <td style="background-color: rgb(82, 157, 255);color:white;font-weight:bold">@workshop.Title</td>
+                                <td class="desc" style="background-color: rgb(82, 157, 255);color:white;font-weight:bold">@workshop.Duration minutes</td>
+                                <td style="background-color: rgb(82, 157, 255);color:white;font-weight:bold">@workshop.Location</td>
+                                <td style="background-color: rgb(82, 157, 255);">
+                                    <span class="block-email" style="background-color: rgb(255, 84, 93);color:white">@workshop.Availability</span>
+                                </td>
+                                <td style="background-color: rgb(82, 157, 255);color:white;font-weight:bold">
+                                    @workshop.Capacity pieces
+                                </td>
+                                <td style="background-color: rgb(82, 157, 255);">
+                                    <div class="table-data-feature">
+                                        @if (workshop.Attendances != null && workshop.Attendances.Any(a => a.WorkshopId == workshop.Id && a.CreateApplicationUserDto_DALId == User.FindFirstValue(ClaimTypes.NameIdentifier) && a.isAttended))
+                                        {
+                                            <button class="item" data-toggle="tooltip" data-placement="top" title="Send" style="background-color:rgb(183, 184, 182)" disabled>
+                                                <i class="zmdi zmdi-assignment-check" style="color:white"></i>
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <a asp-action="AttendWorkshop" asp-route-id="@workshop.Id">
+                                                <button class="item" data-toggle="tooltip" data-placement="top" title="Send" style="background-color:white">
+                                                    <i class="zmdi zmdi-assignment-check" style="color:rgb(64, 184, 96)"></i>
+                                                </button>
+                                            </a>
+                                        }
+          
+
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
