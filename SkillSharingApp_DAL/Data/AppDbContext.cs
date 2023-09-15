@@ -22,5 +22,6 @@ namespace SkillSharingApp_DAL.Data
             modelBuilder.Entity<Attendance>()
                 .HasKey(a => new { a.CreateApplicationUserDto_DALId, a.WorkshopId });
         }
+        public DbSet<Comment> Comments { get; set; }
     }
 }

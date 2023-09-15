@@ -1,0 +1,32 @@
+﻿@using SkillSharingApp_BAL.DTOs;
+@model CommentDto
+
+@{
+    ViewData["Title"] = "Edit Comment";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<h2>Edit Comment</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.TutorialId)
+    @Html.HiddenFor(m => m.UserId)
+    @Html.HiddenFor(m => m.FirstName)
+    @Html.HiddenFor(m => m.Lastname)
+    @Html.HiddenFor(m => m.DateTime)
+    @Html.HiddenFor(m => m.IsEdited)
+    
+    
+
+    <div class="form-group">
+        <label for="Content">Content:</label>
+        @Html.TextAreaFor(m => m.Content, new { @class = "form-control", rows = "3" })
+        @Html.ValidationMessageFor(m => m.Content)
+    </div>
+
+
+    <input type="submit" value="Save" />
+    <a class="btn btn-secondary" href="@Url.Action("Details", "Tutorial", new { id = Model.TutorialId })">Cancel</a>
+}
