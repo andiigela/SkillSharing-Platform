@@ -5,6 +5,7 @@ using SkillSharingApp_BAL.DTOs;
 using SkillSharingApp_BAL.Services;
 using Microsoft.AspNetCore.Identity;
 using SkillSharingApp.Models;
+using SkillSharingApp.BLL.Services;
 
 namespace SkillSharingApp.Controllers
 {
@@ -12,12 +13,14 @@ namespace SkillSharingApp.Controllers
     {
         private readonly ITutorialService _tutorialService;
         private readonly IMapper _mapper;
+        private readonly ICommentService _commentService;
         private readonly UserManager<ApplicationUser> _userManager;
 
 
-        public TutorialController(ITutorialService tutorialService, IMapper mapper, UserManager<ApplicationUser> userManager)
+        public TutorialController(ITutorialService tutorialService, ICommentService commentService, IMapper mapper, UserManager<ApplicationUser> userManager)
         {
             _tutorialService = tutorialService;
+            _commentService = commentService;
             _mapper = mapper;
             _userManager = userManager;
         }
@@ -116,7 +119,7 @@ namespace SkillSharingApp.Controllers
 
             return RedirectToAction("Index");
         }
-
+        /*
         public IActionResult Details(int id)
         {
             var tutorial = _tutorialService.GetTutorialById(id);
@@ -124,7 +127,29 @@ namespace SkillSharingApp.Controllers
             {
                 return NotFound();
             }
+
+            var commentDtos = _commentService.GetCommentsByTutorialId(id);
+            tutorial.Comments = commentDtos.ToList();
             return View(tutorial);
+        }*/
+        public IActionResult Details(int id)
+        {
+            var tutorial = _tutorialService.GetTutorialById(id);
+            if (tutorial == null)
+            {
+                return NotFound();
+            }
+
+
+            var allTutorials = _tutorialService.GetAllTutorials();
+
+ 
+            var allTutorialsDto = _mapper.Map<IEnumerable<TutorialDto>>(allTutorials);
+
+            var commentDtos = _commentService.GetCommentsByTutorialId(id);
+            tutorial.Comments = commentDtos.ToList();
+
+            return View((CurrentTutorial: tutorial, OtherTutorials: allTutorialsDto));
         }
     }
 }

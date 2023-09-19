@@ -12,7 +12,7 @@ using SkillSharingApp.Data;
 namespace SkillSharingApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230909103102_AddIdentity")]
+    [Migration("20230919212033_AddIdentity")]
     partial class AddIdentity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
