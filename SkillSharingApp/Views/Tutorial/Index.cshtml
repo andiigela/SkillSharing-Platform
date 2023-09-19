@@ -12,85 +12,215 @@
     bool isAuthenticated = User.Identity.IsAuthenticated;
 }
 
+@{
+    var roles = UserManager.GetRolesAsync(UserManager.FindByNameAsync(User.Identity.Name)?.Result).Result;
+}
+
+
 <h1>Tutorials</h1>
 
-
 @inject UserManager<ApplicationUser> UserManager
+@inject RoleManager<IdentityRole> RoleManager
+
+
+<div class="mb-4">
+    <form method="GET">
+        <div class="input-group">
+            <input type="text" class="form-control" name="searchQuery" placeholder="Search by Title">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
+            </div>
+            <div class="input-group-append">
+                <select name="filterOption" onchange="applyFilter()" class="form-control">
+                    <option value="">Filter By</option>
+                    <option value="myTutorials">My Tutorials</option>
+                    <option value="allTutorials">All Tutorials</option>
+                    <option value="category">Filter by Category</option>
+                    <option value="aToZ">Filter A to Z</option>
+                    <option value="zToA">Filter Z to A</option>
+                </select>
+            </div>
+        </div>
+    </form>
+</div>
+
+@if (isAuthenticated && roles.Contains("Admin"))
+{
+    <a class="btn btn-success mb-4 btn-custom" href="@Url.Action("Index", "Category")">View Categories</a>
+}
+
 
 @if (isAuthenticated)
 {
-    <a class="btn btn-primary" href="@Url.Action("Create", "Tutorial")">Create New</a>
-    <button type="button" class="btn btn-secondary" onclick="showMyTutorials('@User.Identity.Name')">My Tutorials</button>
-    <button type="button" class="btn btn-secondary" onclick="showAllTutorials()">All Tutorials</button>
-    <div class="table-responsive" style="margin-bottom: 350px">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Duration</th>
-                    <th>Instructions</th>
-                    <th>Video URL</th>
-                    <th>Image URL</th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var tutorial in Model)
-                {
-                    <tr class="tutorial-row @((User.Identity.IsAuthenticated && tutorial.UserId == UserManager.FindByNameAsync(User.Identity.Name)?.Result.Id) ? "my-tutorial" : "other-tutorial")">
-                        <td>@tutorial.Title</td>
-                        <td>@(tutorial.Description.Length > 30 ? tutorial.Description.Substring(0, 30) + "..." : tutorial.Description)</td>
-                        <td>@tutorial.Duration</td>
-                        <td>@(tutorial.Instructions.Length > 30 ? tutorial.Instructions.Substring(0, 30) + "..." : tutorial.Instructions)</td>
-                        <td>@(tutorial.VideoUrl.Length > 30 ? tutorial.VideoUrl.Substring(0, 30) + "..." : tutorial.VideoUrl)</td>
-                        <td>@(tutorial.ImageUrl.Length > 30 ? tutorial.ImageUrl.Substring(0, 30) + "..." : tutorial.ImageUrl)</td>
-                        <td>
-                            <a class="btn btn-primary" href="@Url.Action("Details", "Tutorial", new { id = tutorial.Id })">Watch Tutorial</a>
-                        </td>
-                        <td>
-                            <a class="btn btn-primary" href="@Url.Action("Edit", "Tutorial", new { id = tutorial.Id })">Edit</a>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_@tutorial.Id">Delete</button>
-                        </td>
-                    </tr>
-
-                    <div class="modal fade" id="confirmDeleteModal_@tutorial.Id" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirm Delete</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    Are you sure you want to delete this tutorial?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                    <form action="@Url.Action("Delete", "Tutorial", new { id = tutorial.Id })" method="post">
-                                        @Html.AntiForgeryToken()
-                                        <button type="submit" class="btn btn-danger">Yes</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </tbody>
-        </table>
-    </div>
+    <a class="btn btn-primary mb-4 btn-custom" href="@Url.Action("Create", "Tutorial")">New Tutorial</a>
 }
 
+<div class="row">
+    @foreach (var tutorial in Model)
+    {
+        var tutorialType = (User.Identity.IsAuthenticated && tutorial.UserId == UserManager.FindByNameAsync(User.Identity.Name)?.Result.Id) ? "my-tutorial" : "other-tutorial";
+
+        var user = UserManager.FindByIdAsync(tutorial.UserId)?.Result;
+        var userName = user != null ? $"{user.FirstName} {user.Lastname}" : "Unknown";
+
+        <div class="col-lg-4 col-md-6 mb-4 tutorial-row @tutorialType">
+            <div class="card h-100">
+                <div class="card-image" style="background-image: url('@tutorial.ImageUrl');">
+                    <video id="video-@tutorial.Id" class="video-preview" preload="none" src="@tutorial.VideoUrl"></video>
+                    <a href="@Url.Action("Details", "Tutorial", new { id = tutorial.Id })" class="stretched-link"></a>
+                    @if (User.Identity.IsAuthenticated && tutorial.UserId == UserManager.FindByNameAsync(User.Identity.Name)?.Result.Id)
+                    {
+                        <div class="dropdown card-dropdown">
+                            <button class="btn btn-secondary btn-sm dropdown-toggle card-dropdown-button" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="@Url.Action("Edit", "Tutorial", new { id = tutorial.Id })">Edit</a>
+                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal_@tutorial.Id">Delete</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a href="@Url.Action("Details", "Tutorial", new { id = tutorial.Id })">@tutorial.Title</a>
+                    </h4>
+                    <p class="card-text">@(tutorial.Description.Length > 100 ? tutorial.Description.Substring(0, 100) + "..." : tutorial.Description)</p>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Added by @userName</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="confirmDeleteModal_@tutorial.Id">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Confirm Delete</h4>
+                        <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                        Are you sure you want to delete this tutorial?
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+                        <form action="@Url.Action("Delete", "Tutorial", new { id = tutorial.Id })" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-primary">Yes</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<nav>
+    <ul class="pagination">
+        @if (ViewBag.CurrentPage > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", new { currentPage = ViewBag.CurrentPage - 1 })">Previous</a>
+            </li>
+        }
+        @for (var i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { currentPage = i })">@i</a>
+            </li>
+        }
+        @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", new { currentPage = ViewBag.CurrentPage + 1 })">Next</a>
+            </li>
+        }
+    </ul>
+</nav>
+
+<style>
+    .img-custom {
+        height: 400px;
+        object-fit: cover;
+    }
+
+    .card-image {
+        height: 400px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+
+    .video-preview {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+        object-fit: cover;
+    }
+
+    .btn-custom {
+        border-radius: 20px;
+        background-color: #5fcf80;
+        color: #fff;
+    }
+
+        .btn-custom:hover {
+            background-color: #4fa76e;
+            color: #fff;
+        }
+
+    .hidden {
+        display: none;
+    }
+
+    select[name="filterOption"] {
+        background-color: #5fcf80;
+        color: #fff;
+    }
+
+    .card-dropdown {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 1;
+    }
+
+    .card-dropdown-button {
+        background: rgba(0, 0, 0, 0.3);
+        border-color: transparent;
+        color: white;
+    }
+
+        .card-dropdown-button:focus,
+        .card-dropdown-button:active,
+        .card-dropdown-button:hover {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+    .page-item a {
+        background-color: #5fcf80;
+        color: white;
+    }
+
+        .page-item a:hover {
+            background-color: #4fa76e;
+            color: white;
+        }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
-    function showMyTutorials(userId) {
+    function showMyTutorials() {
         const tutorialRows = document.querySelectorAll('.tutorial-row');
         tutorialRows.forEach(row => {
             if (row.classList.contains('my-tutorial')) {
-                row.style.display = 'table-row';
+                row.style.display = 'block';
             } else {
                 row.style.display = 'none';
             }
@@ -100,7 +230,42 @@
     function showAllTutorials() {
         const tutorialRows = document.querySelectorAll('.tutorial-row');
         tutorialRows.forEach(row => {
-            row.style.display = 'table-row';
+            row.style.display = 'block';
         });
+    }
+
+    $(function () {
+        var timeout;
+        $('.card-image').mouseenter(function () {
+            var video = $(this).find('video')[0];
+            video.style.display = 'block';
+            video.play();
+            timeout = setTimeout(function () {
+                video.pause();
+                video.style.display = 'none';
+            }, 5000);
+        }).mouseleave(function () {
+            var video = $(this).find('video')[0];
+            clearTimeout(timeout);
+            video.pause();
+            video.style.display = 'none';
+        });
+    });
+
+    function applyFilter() {
+        const filterValue = document.querySelector('select[name="filterOption"]').value;
+        const categoryFilterContainer = document.getElementById('categoryFilterContainer');
+        const categoryFilter = document.getElementById('categoryFilter');
+
+        if (filterValue === "category") {
+            categoryFilterContainer.classList.remove('hidden');
+        } else {
+            categoryFilterContainer.classList.add('hidden');
+            categoryFilter.value = "";
+        }
+
+        if (filterValue !== "category") {
+            document.querySelector('form[method="GET"]').submit();
+        }
     }
 </script>

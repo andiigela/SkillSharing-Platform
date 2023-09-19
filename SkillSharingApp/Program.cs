@@ -28,8 +28,7 @@ builder.Services.AddScoped<ICommentRepository>(provider => provider.GetService<C
 builder.Services.AddScoped<CommentService>();
 builder.Services.AddScoped<ICommentService>(provider => provider.GetService<CommentService>());
 
-builder.Services.AddScoped<ILessonRepository<Lesson>, LessonRepository>();
-builder.Services.AddScoped<IServiceLesson, ServiceLesson>();
+
 builder.Services.AddScoped<ITutorialRepository, TutorialRepository>();
 builder.Services.AddScoped<ITutorialService, TutorialService>();
 
@@ -113,8 +112,6 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
       name: "default",
       pattern: "{controller=Roles}/{action=Delete}");
-        name: "default",
-        pattern: "{controller=RolesController}/{action=Index}");
 });
 app.UseEndpoints(endpoints =>
 {

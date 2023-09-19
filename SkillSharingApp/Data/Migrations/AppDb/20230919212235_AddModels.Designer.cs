@@ -12,7 +12,7 @@ using SkillSharingApp_DAL.Data;
 namespace SkillSharingApp.Migrations.AppDb
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230909103736_AddModels")]
+    [Migration("20230919212235_AddModels")]
     partial class AddModels
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,6 +70,46 @@ namespace SkillSharingApp.Migrations.AppDb
                     b.ToTable("Attendances");
                 });
 
+            modelBuilder.Entity("SkillSharingApp_DAL.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsEdited")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Lastname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TutorialId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TutorialId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("SkillSharingApp_DAL.Models.Image", b =>
                 {
                     b.Property<string>("Id")
@@ -87,6 +127,72 @@ namespace SkillSharingApp.Migrations.AppDb
                     b.HasIndex("WorkshopId");
 
                     b.ToTable("Image");
+                });
+
+            modelBuilder.Entity("SkillSharingApp_DAL.Models.Lesson", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double?>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("imageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Lessons");
+                });
+
+            modelBuilder.Entity("SkillSharingApp_DAL.Models.Tutorial", b =>
+                {
+                    b.Property<int>("TutorialId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TutorialId"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Instructions")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("VideoUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TutorialId");
+
+                    b.ToTable("Tutorials");
                 });
 
             modelBuilder.Entity("SkillSharingApp_DAL.Models.Workshop", b =>
@@ -144,6 +250,17 @@ namespace SkillSharingApp.Migrations.AppDb
                     b.Navigation("CreateApplicationUserDto_DAL");
 
                     b.Navigation("Workshop");
+                });
+
+            modelBuilder.Entity("SkillSharingApp_DAL.Models.Comment", b =>
+                {
+                    b.HasOne("SkillSharingApp_DAL.Models.Tutorial", "Tutorial")
+                        .WithMany()
+                        .HasForeignKey("TutorialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tutorial");
                 });
 
             modelBuilder.Entity("SkillSharingApp_DAL.Models.Image", b =>
