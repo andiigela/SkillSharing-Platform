@@ -1,62 +1,110 @@
 @using Microsoft.AspNetCore.Identity;
-@using SkillSharingApp_BAL.DTOs;
+@using Microsoft.AspNetCore.Http.Extensions;
+@using System.Net;
 @using SkillSharingApp.Models;
-@model TutorialDto
+@using SkillSharingApp_BAL.DTOs;
+@model (TutorialDto CurrentTutorial, IEnumerable<TutorialDto> OtherTutorials)
 
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Tutorial Details";
     Layout = "~/Pages/Shared/_Layout.cshtml";
+
+    var pageUrl = WebUtility.UrlEncode(Context.Request.GetDisplayUrl());
+    var user = UserManager.FindByIdAsync(Model.CurrentTutorial.UserId)?.Result;
+    var userName = user != null ? $"{user.FirstName} {user.Lastname}" : "Unknown";
+    var imgSrc = user?.ProfilePicture != null ? $"data:image/png;base64,{Convert.ToBase64String(user.ProfilePicture)}" : null;
 }
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-lg-10 col-md-12">
-            <h1 class="display-5 text-center">@Model.Title</h1>
-
-            <div class="embed-responsive embed-responsive-16by9 mb-3">
-                <iframe class="embed-responsive-item" src="@Model.VideoUrl" allowfullscreen width="1200" height="720"></iframe>
+<div class="container-fluid details-page">
+    <div class="row">
+        <div class="col-lg-8 col-md-12">
+            <div class="embed-responsive embed-responsive-16by9 mb-4 custom-iframe-container">
+                <iframe class="embed-responsive-item custom-iframe" src="@Model.CurrentTutorial.VideoUrl" allowfullscreen></iframe>
             </div>
 
-            <div class="card mt-3">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="@Model.ImageUrl" class="img-thumbnail" alt="Tutorial Image">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title">Title: @Model.Title</h5>
-                            <p class="card-text">Description: @Model.Description</p>
-                            <p class="card-text">Duration: @Model.Duration</p>
-                            <p class="card-text">Instructions: @Model.Instructions</p>
+
+            <div class="d-flex align-items-center mb-3 user-details">
+                <img src="@imgSrc" class="rounded-circle mr-3" alt="User Profile Picture" width="40" height="40">
+                <h5>@userName</h5>
+            </div>
+
+            <div class="card mt-3 mb-5 tutorial-details-card">
+                <div class="card-body">
+                    <h4 class="card-title">@Model.CurrentTutorial.Title</h4>
+                    <p class="card-text">@Model.CurrentTutorial.Description</p>
+                    <p class="card-text"><strong>Duration:</strong> @Model.CurrentTutorial.Duration minutes</p>
+                    <p class="card-text"><strong>Instructions:</strong> @Model.CurrentTutorial.Instructions</p>
+                    <button type="button" class="btn btn-outline-primary btn-share mb-4" data-bs-toggle="modal" data-bs-target="#shareModal">
+                        <i class="bi bi-share"></i> Share
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal fade" id="shareModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="shareModalLabel">Share Tutorial</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="d-grid gap-2">
+                                <a class="btn btn-outline-primary" href="https://www.facebook.com/sharer/sharer.php?u=@pageUrl" target="_blank">
+                                    <i class="bi bi-facebook"></i> Facebook
+                                </a>
+                                <a class="btn btn-outline-secondary" href="https://www.linkedin.com/shareArticle?mini=true&url=@pageUrl" target="_blank">
+                                    <i class="bi bi-linkedin"></i> LinkedIn
+                                </a>
+                                <a class="btn btn-outline-success" href="https://api.whatsapp.com/send?text=@pageUrl" target="_blank">
+                                    <i class="bi bi-whatsapp"></i> WhatsApp
+                                </a>
+                                <a class="btn btn-outline-danger" href="https://discord.com/share?text=@pageUrl" target="_blank">
+                                    <i class="bi bi-discord"></i> Discord
+                                </a>
+                                <a class="btn btn-outline-info" href="https://twitter.com/intent/tweet?text=@pageUrl" target="_blank">
+                                    <i class="bi bi-twitter"></i> Twitter
+                                </a>
+                                <a class="btn btn-outline-dark" href="mailto:?subject=Check out this tutorial&body=@pageUrl">
+                                    <i class="bi bi-envelope"></i> Email
+                                </a>
+                                <a class="btn btn-outline-warning" href="https://reddit.com/submit?url=@pageUrl&title=Check this tutorial" target="_blank">
+                                    <i class="bi bi-reddit"></i> Reddit
+                                </a>
+                                <a class="btn btn-outline-info" href="https://telegram.me/share/url?url=@pageUrl&text=Check this tutorial" target="_blank">
+                                    <i class="bi bi-telegram"></i> Telegram
+                                </a>
+                                <a class="btn btn-outline-danger" href="https://pinterest.com/pin/create/button/?url=@pageUrl&media=&description=YourDescription" target="_blank">
+                                    <i class="bi bi-pinterest"></i> Pinterest
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            @inject UserManager<ApplicationUser> UserManager
 
             @if (User.Identity.IsAuthenticated)
             {
                 <div class="mt-3">
                     <h3>Add Comment</h3>
                     <form id="commentForm" action="@Url.Action("AddComment", "Comment")" method="post">
-                        <input type="hidden" name="tutorialId" value="@Model.Id" />
+                        <input type="hidden" name="tutorialId" value="@Model.CurrentTutorial.Id" />
                         <input type="hidden" name="userId" value="@UserManager.GetUserId(User)" />
                         <div class="form-group">
                             <label for="commentContent">Comment:</label>
                             <textarea class="form-control" id="commentContent" name="content" rows="3"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-secondary mt-2">Submit</button>
                     </form>
                 </div>
             }
 
-            @if (Model.Comments != null && Model.Comments.Any())
+            @if (Model.CurrentTutorial.Comments != null && Model.CurrentTutorial.Comments.Any())
             {
                 <div class="mt-3">
-                    <h3>Comments</h3>
+                    <h4>Comments</h4>
                     <ul class="list-group">
-                        @foreach (var comment in Model.Comments)
+                        @foreach (var comment in Model.CurrentTutorial.Comments)
                         {
                             <li class="list-group-item">
                                 <div class="d-flex justify-content-between align-items-center">
@@ -94,5 +142,212 @@
                 </div>
             }
         </div>
+
+        <div class="col-lg-4">
+            <h4>Related Tutorials</h4>
+            <div class="row">
+                @foreach (var tutorial in Model.OtherTutorials)
+                {
+                    <div class="col-12 mb-4">
+                        <div class="card other-tutorial-card">
+                            <div class="row g-0">
+                                <div class="col-md-4 position-relative">
+                                    <a href="@Url.Action("Details", "Tutorial", new { id = tutorial.Id })">
+                                        <img class="other-tutorial-img" src="@tutorial.ImageUrl" alt="Tutorial Image">
+                                        <span class="duration-label">@tutorial.Duration minutes</span>
+                                    </a>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <a href="@Url.Action("Details", "Tutorial", new { id = tutorial.Id })">@tutorial.Title</a>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
 </div>
+
+<style>
+    .content-wrapper {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .tutorial-img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+
+    .details-page {
+        padding: 20px;
+        margin: 0 auto;
+        box-sizing: border-box;
+    }
+
+    .tutorial-detail-image {
+        max-width: 100%;
+        max-height: 350px;
+        object-fit: cover;
+    }
+
+    .other-tutorial-card {
+        height: 200px;
+        overflow: hidden;
+    }
+
+    .other-tutorial-img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .bg-custom {
+        background-color: #5fcf80;
+        color: #fff;
+    }
+
+        .bg-custom:hover {
+            background-color: #4fa76e;
+        }
+
+    .duration-label {
+        position: absolute;
+        bottom: 5px;
+        left: 5px;
+        background-color: rgba(0,0,0,0.7);
+        color: #fff;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-weight: 500;
+        z-index: 10;
+    }
+
+    video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .user-details {
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 10px;
+    }
+
+    .tutorial-details-card {
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        border: none;
+    }
+
+        .tutorial-details-card h2 {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+    .btn-share {
+        background-color: #5fcf80;
+        border-color: #4fa76e;
+        color: white;
+        border-radius: 20px;
+        padding: 10px 20px;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .btn-share:hover {
+            background-color: #4fa76e;
+            border-color: #5fcf80;
+            color: white;
+        }
+
+        .btn-share i {
+            margin-right: 5px;
+        }
+
+    .other-tutorial-card,
+    .tutorial-details-card {
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: all 0.2s ease-in-out;
+    }
+
+        .tutorial-details-card:hover,
+        .other-tutorial-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.1);
+        }
+
+    .tutorial-details-card {
+        background-color: #ffffff;
+    }
+
+    .user-details {
+        border-bottom: 1px solid #eaeaea;
+        padding-bottom: 10px;
+    }
+
+    .btn, .btn-outline-primary, .btn-share {
+        border-radius: 20px;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .bg-custom {
+        background-color: #5fcf80;
+        color: #fff;
+        border-radius: 15px;
+    }
+
+        .bg-custom:hover {
+            background-color: #4fa76e;
+        }
+
+    .duration-label {
+        position: absolute;
+        bottom: 5px;
+        left: 5px;
+        background-color: rgba(0, 0, 0, 0.7);
+        color: #fff;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-weight: 500;
+        z-index: 10;
+    }
+
+    h4, h5 {
+        color: #333;
+    }
+
+    .list-group-item {
+        border: none;
+        border-bottom: 1px solid #eaeaea;
+        border-radius: 0;
+    }
+
+        .list-group-item:last-child {
+            border-bottom: none;
+        }
+
+    .custom-iframe-container {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%;
+        height: 0;
+        overflow: hidden;
+    }
+
+    .custom-iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+
+</style>

@@ -119,7 +119,7 @@ namespace SkillSharingApp.Controllers
 
             return RedirectToAction("Index");
         }
-
+        /*
         public IActionResult Details(int id)
         {
             var tutorial = _tutorialService.GetTutorialById(id);
@@ -131,6 +131,25 @@ namespace SkillSharingApp.Controllers
             var commentDtos = _commentService.GetCommentsByTutorialId(id);
             tutorial.Comments = commentDtos.ToList();
             return View(tutorial);
+        }*/
+        public IActionResult Details(int id)
+        {
+            var tutorial = _tutorialService.GetTutorialById(id);
+            if (tutorial == null)
+            {
+                return NotFound();
+            }
+
+
+            var allTutorials = _tutorialService.GetAllTutorials();
+
+ 
+            var allTutorialsDto = _mapper.Map<IEnumerable<TutorialDto>>(allTutorials);
+
+            var commentDtos = _commentService.GetCommentsByTutorialId(id);
+            tutorial.Comments = commentDtos.ToList();
+
+            return View((CurrentTutorial: tutorial, OtherTutorials: allTutorialsDto));
         }
     }
 }
