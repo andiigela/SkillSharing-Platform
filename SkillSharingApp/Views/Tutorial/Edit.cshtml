@@ -5,45 +5,89 @@
     ViewData["Title"] = "Edit Tutorial";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
-<h2>Edit Tutorial</h2>
 
-@using (Html.BeginForm())
-{
-    <div>
-        <label>Title:</label>
-        @Html.TextBoxFor(m => m.Title)
-        @Html.ValidationMessageFor(m => m.Title)
-    </div>
-    <div>
-        <label>Duration:</label>
-        @Html.TextBoxFor(m => m.Duration)
-        @Html.ValidationMessageFor(m => m.Duration)
-    </div>
-    <div>
-        <label>Instructions:</label>
-        @Html.TextBoxFor(m => m.Instructions)
-        @Html.ValidationMessageFor(m => m.Instructions)
-    </div>
+<div class="container py-5" style="background-color: #f8f9fa;">
+    <h2 class="mb-3 text-center" style="color: #5fcf80; margin-top:60px">Edit Tutorial</h2>
 
-    <div>
-        <label>Video URL:</label>
-        @Html.TextBoxFor(m => m.VideoUrl)
-        @Html.ValidationMessageFor(m => m.VideoUrl)
-    </div>
+    <div class="card">
+        <div class="card-body">
+            <form asp-controller="Tutorial" asp-action="Edit" method="post" enctype="multipart/form-data" class="p-3">
+                <div class="input-group mb-3">
+                    <span class="input-group-text"><i class="bi bi-journal-text"></i></span>
+                    <input type="text" class="form-control" id="Title" name="Title" placeholder="Title" value="@Model.Title">
+                    @Html.ValidationMessageFor(m => m.Title)
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text"><i class="bi bi-clock"></i></span>
+                    <input type="number" class="form-control" id="Duration" name="Duration" placeholder="Duration" value="@Model.Duration">
+                    @Html.ValidationMessageFor(m => m.Duration)
+                </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text"><i class="bi bi-card-list"></i></span>
+                    <textarea class="form-control" id="Instructions" name="Instructions" placeholder="Instructions">@Model.Instructions</textarea>
+                    @Html.ValidationMessageFor(m => m.Instructions)
+                </div>
+               
 
-    <div>
-        <label>Image URL:</label>
-        @Html.TextBoxFor(m => m.ImageUrl)
-        @Html.ValidationMessageFor(m => m.ImageUrl)
-    </div>
-    <div>
-        <label>Description:</label> <br>
-        @Html.TextAreaFor(m => m.Description, new { rows = 4, cols = 50 })
-        @Html.ValidationMessageFor(m => m.Description)
-    </div>
+                <div class="input-group mb-3">
+                    <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
+                    <input type="text" class="form-control" id="VideoUrl" name="VideoUrl" placeholder="Video URL" value="@Model.VideoUrl">
+                    @Html.ValidationMessageFor(m => m.VideoUrl)
+                </div>
 
-    @Html.HiddenFor(m => m.Comments)
+                <div class="input-group mb-3">
+                    <span class="input-group-text"><i class="bi bi-link-45deg"></i></span>
+                    <input type="text" class="form-control" id="ImageUrl" name="ImageUrl" placeholder="Image URL" value="@Model.ImageUrl">
+                    @Html.ValidationMessageFor(m => m.ImageUrl)
+                </div>
 
-    <input type="submit" value="Save" />
-    <a class="btn btn-secondary" href="@Url.Action("Index", "Tutorial")">Cancel</a>
-}
+                <div class="input-group mb-3">
+                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+                    <textarea class="form-control" id="Description" name="Description" placeholder="Description">@Model.Description</textarea>
+                    @Html.ValidationMessageFor(m => m.Description)
+                </div>
+
+                @Html.HiddenFor(m => m.Comments)
+                @Html.HiddenFor(m => m.UserId)
+
+                <button type="submit" class="btn btn-custom mt-3">Save</button>
+                <a class="btn btn-secondary mt-3" href="@Url.Action("Index", "Tutorial")">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 20px;
+    }
+
+    .card {
+        border-radius: 20px;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        background: #ffffff;
+    }
+
+    .form-control, .form-control-file {
+        border-radius: 15px;
+        border: 1px solid #5fcf80;
+    }
+
+    .btn-custom {
+        border-radius: 20px;
+        background-color: #5fcf80;
+        color: #fff;
+    }
+
+        .btn-custom:hover {
+            background-color: #4fa76e;
+            color: #fff;
+        }
+
+    .input-group-text {
+        background-color: #5fcf80;
+        color: #fff;
+    }
+</style>
